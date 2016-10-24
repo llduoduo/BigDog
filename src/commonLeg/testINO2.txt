@@ -1,0 +1,99 @@
+//#include <Wire.h>
+#include <Servo.h>
+#include <MsTimer2.h>
+
+#include "RTDogLegPos.h"
+#include "RTDogLegTrack.h"
+#include "RTDogCommand.h"
+#include "RTDogLeg.h"
+
+Servo servoU,servoV;
+RTDogLegTrack track[LEG_TRACK_CAPACITY];
+RTDogLeg leg(servoU,servoV,track);
+
+byte feedBack;
+
+//RTDogLegTrack track;
+//time_type t=0;
+
+void legAct() {
+//  t+=ACT_TIME_STEP;
+//  RTDogLegPos pos = track.getPos(t);
+//  servoU.write(pos.getServoPos().u);
+//  servoV.write(180 - pos.getServoPos().v);
+  leg.act();
+}
+//
+//void receiveEvent(int l) {
+//  byte cmd[l];
+//  byte p = 0;
+//  while(Wire.available()) {
+//    cmd[p++] = Wire.read();
+//  }
+//  if(RTDogProtocol::parseCommand(cmd, l, &leg)) {
+//    feedBack = leg.getFeedBack();
+//  } else {
+//    feedBack = RTDogProtocol::CMD_STAT_BAD;
+//  }
+//}
+//void requestEvent() {
+//  Wire.write(feedBack);
+//}
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+//  Wire.begin(2);
+//  Wire.onReceive(receiveEvent);
+//  Wire.onRequest(requestEvent);
+
+  servoU.attach(3);
+  servoV.attach(4);
+  byte cmd[COMMAND_MAX_LENGTH];
+  int l = RTDogProtocol::trackAddPointCommand(cmd,1,{0,0},0);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{100,0},3000);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{100,70},6000);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{0,70},9000);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{0,0},12000);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+
+  l = RTDogProtocol::trackRunCommand(cmd,1,0);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+ 
+// track.addPoint(0,RTDogLegPos(0,0));
+// track.addPoint(3000,RTDogLegPos(100,0));
+// track.addPoint(6000,RTDogLegPos(100,70));
+// track.addPoint(9000,RTDogLegPos(0,70));
+// track.addPoint(12000,RTDogLegPos(0,0));
+
+  MsTimer2::set(ACT_TIME_STEP, legAct); // 10ms period
+  MsTimer2::start();
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+     // byte cmd[COMMAND_MAX_LENGTH];
+     // int l = RTDogProtocol::writeCommand(cmd,{0,0});
+     // RTDogProtocol::parseCommand(cmd, l, &leg);
+
+     // delay(3000);
+
+     // l = RTDogProtocol::writeCommand(cmd,{100,0});
+     // RTDogProtocol::parseCommand(cmd, l, &leg);
+
+     // delay(3000);
+
+     // l = RTDogProtocol::writeCommand(cmd,{100,70});
+     // RTDogProtocol::parseCommand(cmd, l, &leg);
+
+     // delay(3000);
+
+     // l = RTDogProtocol::writeCommand(cmd,{0,70});
+     // RTDogProtocol::parseCommand(cmd, l, &leg);
+
+     // delay(3000);
+}

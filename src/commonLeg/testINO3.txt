@@ -1,0 +1,74 @@
+#include <Wire.h>
+#include <Servo.h>
+#include <MsTimer2.h>
+
+#include "RTDogLegPos.h"
+#include "RTDogLegTrack.h"
+#include "RTDogCommand.h"
+#include "RTDogLeg.h"
+
+Servo servoU,servoV;
+RTDogLegTrack track[LEG_TRACK_CAPACITY];
+RTDogLeg leg(servoU,servoV,track);
+
+byte feedBack;
+
+void legAct() {
+  leg.act();
+}
+
+void receiveEvent(int l) {
+ byte cmd[l];
+ byte p = 0;
+ while(Wire.available()) {
+   cmd[p++] = Wire.read();
+ }
+ if(RTDogProtocol::parseCommand(cmd, l, &leg)) {
+   feedBack = leg.getFeedBack();
+ } else {
+   feedBack = RTDogProtocol::CMD_STAT_BAD;
+ }
+}
+void requestEvent() {
+ Wire.write(feedBack);
+}
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Wire.begin(2);
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
+
+  servoU.attach(3);
+  servoV.attach(4);
+  byte cmd[COMMAND_MAX_LENGTH];
+  int l = RTDogProtocol::trackClearCommand(cmd,1);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{0,0},0);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{100,0},3000);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{100,30},6000);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{0,30},9000);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  l = RTDogProtocol::trackAddPointCommand(cmd,1,{0,0},12000);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+
+  l = RTDogProtocol::trackRunCommand(cmd,1,0);
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+
+  MsTimer2::set(ACT_TIME_STEP, legAct); // 20ms period
+  MsTimer2::start();
+}
+
+void loop() {
+  byte cmd[COMMAND_MAX_LENGTH];
+  delay(3000);
+  int l = RTDogProtocol::trackMoveCommand(cmd,1,{0,30});
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+  delay(3000);
+  l = RTDogProtocol::trackMoveCommand(cmd,1,{0,-30});
+  RTDogProtocol::parseCommand(cmd, l, &leg);
+}

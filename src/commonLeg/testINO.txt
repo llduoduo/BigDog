@@ -1,0 +1,107 @@
+#include "RTDogLegPos.h"
+#include "RTDogLegTrack.h"
+#include "RTDogCommand.h"
+#include "RTDogLeg.h"
+
+// class TestExecutor : public RTDogCommandExecutor {
+//   public:
+//   TestExecutor():RTDogCommandExecutor() {}
+//   void syncCommandExecutor() {
+//     Serial.println("sync!");
+//   }
+//   void bumpCommandExecutor(time_type t) {
+//     Serial.println("bump!");
+//     Serial.println(t);
+//   }
+//   void trackNewCommandExecutor(byte id, byte type) {
+//     Serial.println("new!");
+//     Serial.print("id:");
+//     Serial.println(id);
+//     Serial.print("type");
+//     Serial.println(type);
+//   }
+//   void trackClearCommandExecutor(byte id) {
+//     Serial.println("clear!");
+//     Serial.println(id);
+//   }
+//   void trackAddPointCommandExecutor(byte id, Point p, time_type t) {
+//     Serial.println("add!");
+//     Serial.print("id:");
+//     Serial.println(id);
+//     Serial.print("p:");
+//     Serial.print(p.x);
+//     Serial.print('\t');
+//     Serial.println(p.y);
+//     Serial.print("t:");
+//     Serial.println(t);
+//   }
+
+//   void trackRunCommandExecutor(byte id, time_type t) {
+//     Serial.println("run!");
+//     Serial.print("id:");
+//     Serial.println(id);
+//     Serial.print("t:");
+//     Serial.println(t);
+//   }
+
+//   void trackStopCommandExecutor() {
+//     Serial.println("stop!");
+//   }
+// };
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  // int t = millis();
+   // for(int i = 5; i <= WIDTH; i+=10) {
+   // 	for(int j = 5; j <= HEIGHT; j+=10) {
+   //    Serial.print(i);
+   //    Serial.print("\t");
+   //    Serial.println(j);
+   //    RTDogLegPos(RTDogLegPos(i,j).getServoPos()).log();
+   // 	}
+   // }
+  // Serial.println(millis() - t);
+  
+  
+  
+ // RTDogLegTrack track = RTDogLegTrack();
+ // track.addPoint(0,RTDogLegPos(30,50));
+ // track.addPoint(50,RTDogLegPos(60,20));
+ // track.addPoint(30,RTDogLegPos(20,70));
+ // track.addPoint(200,RTDogLegPos(30,50));
+ // track.log();
+ // Serial.println();
+ // track.getPos(80).log();
+ // track.setOffset({10.0, 5.0});
+ // track.getPos(80).log();
+
+    // TestExecutor test;
+
+    // byte cmd[COMMAND_MAX_LENGTH];
+    // int l = RTDogProtocol::trackStopCommand(cmd);
+    // RTDogProtocol::parseCommand(cmd, l, &test);
+
+    // l = RTDogProtocol::syncCommand(cmd);
+    // RTDogProtocol::parseCommand(cmd, l, &test);
+
+    // l = RTDogProtocol::bumpCommand(cmd, 347298375);
+    // RTDogProtocol::parseCommand(cmd, l, &test);
+
+    // l = RTDogProtocol::trackNewCommand(cmd,1,2);
+    // RTDogProtocol::parseCommand(cmd, l, &test);
+
+    // l = RTDogProtocol::trackClearCommand(cmd,20);
+    // RTDogProtocol::parseCommand(cmd, l, &test);
+
+    // l = RTDogProtocol::trackAddPointCommand(cmd,3,{2.334,3.231},2387638746);
+    // RTDogProtocol::parseCommand(cmd, l, &test);
+
+    // l = RTDogProtocol::trackRunCommand(cmd,3,2);
+    // RTDogProtocol::parseCommand(cmd, l, &test);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
